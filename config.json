@@ -1,0 +1,18 @@
+{
+    "meta": "config file for transparent-lockscreen.ahk",
+    "pixelateSize": 10,
+    "blurSize": 2,
+    "screenshotFilename": "screenshot.png",
+    "removeScreenshot": {
+        "onWinKeyup": false,
+        "onUnlock": false,
+        "onExitApp": true
+    },
+    "registry": {
+        "path": "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PersonalizationCSP",
+        "item": "LockScreenImagePath"
+    },
+    "idlePeriod": 60000,
+    "trayIcon": "pixelation",
+    "debug": false
+}

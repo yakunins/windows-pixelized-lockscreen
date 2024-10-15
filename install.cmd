@@ -6,8 +6,9 @@ set PS=powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile
 set TaskName='PixelizedLockscreen'
 set CurrentUser=%USERDOMAIN%\%USERNAME%
 set CurrentDir=%~dp0
-set Executable='%CurrentDir%\pixelized-lockscreen.exe'
-set command="try{Register-ScheduledTask -TaskName %TaskName% -Trigger (New-ScheduledTaskTrigger -AtStartup) -User '%CurrentUser%' -RunLevel Highest -Action (New-ScheduledTaskAction -Execute %Executable%) -Force; Write-Host 'RegisterTaskOnStartup: PixelizedLockscreen, done.'; }catch{ Write-Host 'RegisterTaskOnStartup: PixelizedLockscreen error:';Write-Host $_;}"
+set File=pixelized-lockscreen.exe
+set Executable='%CurrentDir%%File%'
+set command="try{Register-ScheduledTask -TaskName %TaskName% -Trigger (New-ScheduledTaskTrigger -AtLogon) -User '%CurrentUser%' -RunLevel Highest -Action (New-ScheduledTaskAction -Execute %Executable%) -Force; Write-Host 'RegisterTaskOnStartup: PixelizedLockscreen, done.'; }catch{ Write-Host 'RegisterTaskOnStartup: PixelizedLockscreen error:';Write-Host $_;}"
 
 %PS% -Command %command%
 

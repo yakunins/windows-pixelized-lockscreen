@@ -1,15 +1,15 @@
-; generate pixelated screenshot and set it temporarily as lockscreen background image
+; generates pixelized screenshot on Win keypress, and set it as lockscreen background (temporarily, until reset or logoff)
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 
-#include lib/Log.ahk
-#include lib/Ticks.ahk
 #include lib/MergeFileConfig.ahk
-#include lib/SetLockScreenImage.ahk ; SetLockScreenImage(), UnsetLockScreenImage()
 #include lib/Screenshot.ahk ; ScreenshotToFile()
+#include lib/SetLockScreenImage.ahk ; SetLockScreenImage(), UnsetLockScreenImage()
 #include lib/LockSessionMonitor.ahk ; RegisterSessionMonitor(), UnregisterSessionMonitor()
 #include lib/RemoveTrayTooltip.ahk
 #include lib/UseBase64TrayIcon.ahk
+#include lib/Log.ahk
+#include lib/Ticks.ahk
 
 config := {
     fileConfig: "config.json",
@@ -30,7 +30,8 @@ config := {
         item: 'LockScreenImagePath',
     },
     idlePeriod: 1000 * 60, ; 60 seconds = period of inactivity, screenshot to be set onto lockscreen after, 0 to disable
-    trayIcon: "pixelation",
+    trayIcon: "screenshotlock",
+    trayTooltip: true,
     debug: false,
 }
 config := MergeFileConfig(config, config.debug) ; read local config, so it take pecedence
@@ -62,8 +63,9 @@ Init() {
     Hotkey "~RWin up", OnWinUp, "On"
 
     ; fun
-    RemoveTrayTooltip()
     SetTrayIcon(config.trayIcon)
+    if (config.trayTooltip == false)
+        RemoveTrayTooltip()
 }
 
 ; keypress handlers

@@ -1,5 +1,5 @@
 {
-    "meta": "config file for transparent-lockscreen.ahk",
+    "meta": "config file for pixelized-lockscreen.ahk",
     "pixelateSize": 10,
     "blurSize": 2,
     "screenshotFilename": "screenshot.png",
@@ -13,6 +13,7 @@
         "item": "LockScreenImagePath"
     },
     "idlePeriod": 60000,
-    "trayIcon": "pixelation",
+    "trayIcon": "screenshotlock",
+    "trayTooltip": true,
     "debug": false
 }

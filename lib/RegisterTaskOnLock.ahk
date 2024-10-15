@@ -1,5 +1,4 @@
 ; register and unregister new task for Task Scheduler © gihub.com/yakunins
-
 #Requires AutoHotkey v2.0
 
 PS := 'powershell.exe'

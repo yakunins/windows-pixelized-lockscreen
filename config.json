@@ -2,6 +2,7 @@
     "meta": "config file for pixelized-lockscreen.ahk",
     "pixelateSize": 10,
     "blurSize": 2,
+    "idlePeriod": 60000,
     "screenshotFilename": "screenshot.png",
     "removeScreenshot": {
         "onWinKeyup": false,
@@ -12,7 +13,6 @@
         "path": "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PersonalizationCSP",
         "item": "LockScreenImagePath"
     },
-    "idlePeriod": 60000,
     "trayIcon": "screenshotlock",
     "trayTooltip": true,
     "debug": false

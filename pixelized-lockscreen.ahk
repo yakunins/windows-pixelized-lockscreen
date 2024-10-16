@@ -15,6 +15,7 @@ config := {
     fileConfig: "config.json",
     pixelateSize: 10,
     blurSize: 2,
+    idlePeriod: 1000 * 60, ; period of inactivity, after which screenshot to be set as lockscreen image, 0 to disable
     screenshotFilename: "screenshot.png",
     removeScreenshot: {
         onWinKeyup: false,
@@ -23,13 +24,12 @@ config := {
     },
     unsetLockImage: {
         onUnlock: false,
-        onExitApp: true,
+        onExitApp: true, ; including on reset, logoff, shut down
     },
     registry: {
         path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP',
         item: 'LockScreenImagePath',
     },
-    idlePeriod: 1000 * 60, ; 60 seconds = period of inactivity, screenshot to be set onto lockscreen after, 0 to disable
     trayIcon: "screenshotlock",
     trayTooltip: true,
     debug: false,

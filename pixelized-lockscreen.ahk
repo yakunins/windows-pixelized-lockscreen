@@ -40,19 +40,21 @@ config.screenshotPath := A_ScriptDir . "\" . config.screenshotFilename
 state := {
     isLockImageSet: 0,
     isUnlocked: 1,
-    isIdleCheckScheduled: 0,
+    screenshotTimestamp: A_TickCount,
     win: 0, ; state of win key (#)
 }
 
 Init()
 Init() {
-    ; test run
+    ; test run start
     Screenshot()
-    SetLock()
-    UnsetLock() ; 2ms
+    SetLockScreen()
+    UnsetLockScreen()
+    ; test run end
 
-    ; supplemantary
-    ScheduleIdleCheck()
+    if (config.idlePeriod > 0)
+        IdleCheck()
+
     OnExit(ExitFn)
     RegisterSessionMonitor()
 
@@ -70,16 +72,15 @@ Init() {
 
 ; keypress handlers
 OnWinDown(key := 0) {
-    LogToFile("win key down")
+    LogToFile("Win key down")
     if state.win
         return
     state.win := 1
     Screenshot()
-    if (config.unsetLockImage.onUnlock or state.isLockImageSet == 0)
-        SetLock() ; could fail due to lock timing
+    SetLockScreen() ; could fail due to lock timing
 }
 OnWinUp(key := 0) {
-    LogToFile("win key up")
+    LogToFile("Win key up")
     state.win := 0
     if config.removeScreenshot.onWinKeyup
         RemoveScreenshot()
@@ -87,18 +88,22 @@ OnWinUp(key := 0) {
 
 ; helper functions
 Screenshot() {
-    LogToFile("ScreenshotToFile()")
+    LogToFile("Screenshot()")
     ScreenshotToFile(config.screenshotPath, config.pixelateSize, config.blurSize, config.debug) ; ~33ms
 }
-SetLock() {
-    LogToFile("SetLock()")
-    SetLockScreenImage(config.screenshotPath, config.registry.path, config.registry.item, config.debug) ; ~3ms
-    state.isLockImageSet := 1
+SetLockScreen() {
+    LogToFile("SetLockScreen()")
+    if !state.isLockImageSet {
+        SetLockScreenImage(config.screenshotPath, config.registry.path, config.registry.item, config.debug) ; ~3ms
+        state.isLockImageSet := 1
+    }
 }
-UnsetLock() {
-    LogToFile("UnsetLock()")
-    UnsetLockScreenImage(config.registry.path, config.registry.item, config.debug) ; ~2ms
-    state.isLockImageSet := 0
+UnsetLockScreen() {
+    LogToFile("UnsetLockScreen()")
+    if state.isLockImageSet {
+        UnsetLockScreenImage(config.registry.path, config.registry.item, config.debug) ; ~2ms
+        state.isLockImageSet := 0
+    }
 }
 RemoveScreenshot() {
     LogToFile("RemoveScreenshot()")
@@ -115,26 +120,17 @@ OnSessionUnlock() {
         state.win := 0
     }
     if config.unsetLockImage.onUnlock
-        UnsetLock()
+        UnsetLockScreen()
     if config.removeScreenshot.onUnlock
         RemoveScreenshot()
 }
-ScheduleIdleCheck(period := 10000) { ; default period is 10 seconds
-    if (config.idlePeriod > 0) {
-        if state.isIdleCheckScheduled
-            return
-        state.isIdleCheckScheduled := 1
-        SetTimer IdleCheck, period * -1
-    }
-}
 IdleCheck() {
-    LogToFile("IdleCheck()")
-    state.isIdleCheckScheduled := 0
     if A_TimeIdle > config.idlePeriod { ; is idle now
-        SetLock()
-        ScheduleIdleCheck(config.idlePeriod)
+        Screenshot()
+        SetLockScreen()
+        SetTimer IdleCheck, config.idlePeriod / -1
     } else {
-        ScheduleIdleCheck()
+        SetTimer IdleCheck, config.idlePeriod / -6 ; in not idle, so use shortened (1/6) check period
     }
 }
 ExitFn(ExitReason, ExitCode) {
@@ -144,7 +140,7 @@ ExitFn(ExitReason, ExitCode) {
         return
     ; Logoff, Shutdown, Menu, Exit, Reload, Single
     if config.unsetLockImage.onExitApp
-        UnsetLock()
+        UnsetLockScreen()
     if config.removeScreenshot.onExitApp
         RemoveScreenshot()
 }

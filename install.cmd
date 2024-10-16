@@ -8,9 +8,9 @@ set CurrentUser=%USERDOMAIN%\%USERNAME%
 set CurrentDir=%~dp0
 set File=pixelized-lockscreen.exe
 set Executable='%CurrentDir%%File%'
-set command="try{Register-ScheduledTask -TaskName %TaskName% -Trigger (New-ScheduledTaskTrigger -AtLogon) -User '%CurrentUser%' -RunLevel Highest -Action (New-ScheduledTaskAction -Execute %Executable%) -Force; Write-Host 'RegisterTaskOnStartup: PixelizedLockscreen, done.'; }catch{ Write-Host 'RegisterTaskOnStartup: PixelizedLockscreen error:';Write-Host $_;}"
 
-%PS% -Command %command%
+set CreateTask="try{Register-ScheduledTask -TaskName %TaskName% -Trigger (New-ScheduledTaskTrigger -AtLogon) -User '%CurrentUser%' -RunLevel Highest -Action (New-ScheduledTaskAction -Execute %Executable%) -Force; Write-Host 'RegisterTaskOnStartup: PixelizedLockscreen, done.'; }catch{ Write-Host 'RegisterTaskOnStartup: PixelizedLockscreen error:';Write-Host $_;}"
+%PS% -Command %CreateTask%
 
 :prompt
 set /P OPEN=Open Task Scgheduler? Y/[N]

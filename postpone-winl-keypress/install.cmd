@@ -1,0 +1,21 @@
+:: creates at-logon Scheduled Task 
+@echo off
+setlocal EnableExtensions DisableDelayedExpansion
+
+set PS=powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile
+set TaskName='PostponeWinL'
+set CurrentUser=%USERDOMAIN%\%USERNAME%
+set CurrentDir=%~dp0
+set File=postpone-win-l.exe
+set Executable='%CurrentDir%%File%'
+
+set CreateTask="try{Register-ScheduledTask -TaskName %TaskName% -Trigger (New-ScheduledTaskTrigger -AtLogon) -User '%CurrentUser%' -RunLevel Highest -Action (New-ScheduledTaskAction -Execute %Executable%) -Force; Write-Host 'RegisterTaskOnStartup: PixelizedLockscreen, done.'; }catch{ Write-Host 'RegisterTaskOnStartup: PixelizedLockscreen error:';Write-Host $_;}"
+%PS% -Command %CreateTask%
+
+:prompt
+set /P OPEN=Open Task Scgheduler? Y/[N]
+if /I "%OPEN%" neq "Y" goto end
+start Taskschd.msc
+:end
+
+endlocal

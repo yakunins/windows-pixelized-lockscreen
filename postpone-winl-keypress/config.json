@@ -1,0 +1,7 @@
+{
+    "meta": "config file for postpone-win-l.ahk",
+    "postponePeriod": 100,
+    "trayIcon": "postpone",
+    "trayTooltip": true,
+    "debug": false
+}

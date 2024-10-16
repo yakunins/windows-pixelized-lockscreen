@@ -40,7 +40,7 @@ config.screenshotPath := A_ScriptDir . "\" . config.screenshotFilename
 state := {
     isLockImageSet: 0,
     isUnlocked: 1,
-    screenshotTimestamp: A_TickCount,
+    isIdle: 0,
     win: 0, ; state of win key (#)
 }
 
@@ -125,12 +125,16 @@ OnSessionUnlock() {
         RemoveScreenshot()
 }
 IdleCheck() {
-    if A_TimeIdle > config.idlePeriod { ; is idle now
-        Screenshot()
-        SetLockScreen()
-        SetTimer IdleCheck, config.idlePeriod / -1
+    if A_TimeIdle > config.idlePeriod {
+        SetTimer IdleCheck, config.idlePeriod * -1 ; if idle, schedule next check for (not) idle after minute
+        if !state.isIdle {
+            state.isIdle := 1
+            Screenshot() ; this may abort sleep timer as of Screenshot() uses disk access inside
+            SetLockScreen()
+        }
     } else {
-        SetTimer IdleCheck, config.idlePeriod / -6 ; in not idle, so use shortened (1/6) check period
+        SetTimer IdleCheck, 10 * 1000 * -1 ; if schedule check for idle after 10 seconds
+        state.isIdle := 0
     }
 }
 ExitFn(ExitReason, ExitCode) {

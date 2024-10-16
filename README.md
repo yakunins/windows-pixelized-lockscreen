@@ -9,10 +9,11 @@ This helps you stay focused and maintain an unobtrusive work environment, see [H
 
 ## Installation
 1. Download [`pixelized-lockscreen.exe`](pixelized-lockscreen.exe), a compiled version (AHKv2-64) of the script
-2. Download and run [`install.cmd`](install.cmd) (`run as admin` might be required) to create `on-logon` scheduled task
+2. Download and run [`install.cmd`](install.cmd) to run it on startup as scheduled task (`run as admin` might be required)
 
-## Customization
-Download and modyfy [`config.json`](config.json).
+## Customization & Troubleshooting
+Download and modify [`config.json`](config.json).  
+On slow systems making screenshot **may take more time** than timespan between Win keydown and L keydown. So you need to install [postpone-win-l-keypress](/postpone-win-l-keypress) tool.
 
 Enjoy!
 

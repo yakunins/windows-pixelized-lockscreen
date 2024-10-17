@@ -26,6 +26,7 @@ config := {
         onExitApp: true,
     },
     unsetLockImage: {
+        imagePath: false, ; if no Win+L was used, use this image as a default lockscreen background
         onUnlock: false,
         onExitApp: true, ; including on reset, logoff, shut down
     },
@@ -39,6 +40,7 @@ config := {
 }
 config := MergeFileConfig(config, config.debug) ; read local config, so it take pecedence
 config.screenshotPath := A_ScriptDir . "\" . config.screenshotFilename
+config.defaultImagePath := config.unsetLockImage.imagePath != 0 ? GetFullPath(config.unsetLockImage.imagePath) : 0
 
 state := {
     isLockScreenSet: 0,
@@ -102,10 +104,15 @@ SetLockScreen(force := false) {
 }
 UnsetLockScreen(force := false) {
     LogToFile("UnsetLockScreen()")
-    if state.isLockScreenSet or force {
-        UnsetLockScreenImage(config.registry.path, config.registry.item, config.debug) ; ~2ms
-        state.isLockScreenSet := 0
+    if (state.isLockScreenSet and !force)
+        return
+    state.isLockScreenSet := 0
+    if config.defaultImagePath != 0 and FileExist(config.defaultImagePath) {
+        LogToFile("FileExist()!" config.defaultImagePath)
+        SetLockScreenImage(config.defaultImagePath, config.registry.path, config.registry.item, config.debug) ; ~3ms
+        return
     }
+    UnsetLockScreenImage(config.registry.path, config.registry.item, config.debug) ; ~2ms
 }
 RemoveScreenshot() {
     LogToFile("RemoveScreenshot()")
@@ -152,7 +159,7 @@ ExitFn(ExitReason, ExitCode) {
         return
     ; Logoff, Shutdown, Menu, Exit, Reload, Single
     if config.unsetLockImage.onExitApp
-        UnsetLockScreen()
+        UnsetLockScreen(true)
     if config.removeScreenshot.onExitApp
         RemoveScreenshot()
 }
@@ -174,6 +181,13 @@ DeleteFile(path) {
                 MsgBox "Error: FileDelete(" . path . ")"
             return 0
         }
+}
+GetFullPath(path) {
+    ; (c) lexicos
+    cc := DllCall("GetFullPathNameW", "str", path, "uint", 0, "ptr", 0, "ptr", 0, "uint")
+    buf := Buffer(cc * 2)
+    DllCall("GetFullPathNameW", "str", path, "uint", cc, "ptr", buf, "ptr", 0, "uint")
+    return StrGet(buf)
 }
 LogToFile(str1, str2 := "") {
     if config.debug == 0

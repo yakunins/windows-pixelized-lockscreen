@@ -13,7 +13,7 @@ This helps you stay focused and maintain an unobtrusive work environment, see [H
 
 ## Customization & Troubleshooting
 Download and modify [`config.json`](config.json).  
-On slow systems making screenshot **may take more time** than timespan between Win keydown and L keydown. So you need to install [postpone-win-l-keypress](/postpone-win-l-keypress) tool.
+On slow systems making screenshot **may take more time** than timespan between Win keydown and L keydown. So you need to install [postpone-win-l](/postpone-win-l) tool.
 
 Enjoy!
 

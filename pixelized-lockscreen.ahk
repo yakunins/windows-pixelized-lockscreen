@@ -14,7 +14,7 @@
 config := {
     fileConfig: "config.json",
     pixelateSize: 10,
-    blurSize: 2,
+    blurSize: 2, ; effectively screenshot scale, e.g. 1920×1080 to produce 960×540 screenshot
     idlePeriod: 1000 * 60, ; period of inactivity, after which screenshot to be set as lockscreen image, 0 to disable
     screenshotFilename: "screenshot.png",
     removeScreenshot: {

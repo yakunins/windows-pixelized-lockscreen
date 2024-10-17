@@ -14,7 +14,8 @@ This helps you stay focused and maintain an unobtrusive work environment, see [H
 ## Troubleshooting
 On slow systems making screenshot **may take more time** than timespan between Win keydown and L keydown.  
 To add more time before your PC goes into locked state, you may consider to install [postpone-win-l](/postpone-win-l) tool.  
-Also, to reduce screenshot' size, set `blurSize` to greater value. Because effectively, blur size means screenshot scale, e.g. if screen resolution is 1920×1080, `blurSize=2` to produce 960×540 screenshot.  
+
+Also, to reduce screenshot' size, provide `blurSize` with greater value: effectively, blur size means screenshot scale, e.g. when screen resolution is 1920×1080, `blurSize=2` to produce 960×540 screenshot.  
 
 ## Customization
 Download and modify [`config.json`](config.json).  

@@ -1,6 +1,6 @@
 # Pixelized Lockscreen Background Image
 
-<img src="images/how-it-work.gif" width="768" alt="pixelized lockscreen background" />
+<img src="images/pixelized-lockscreen-how-it-works.gif" width="768" alt="pixelized lockscreen background: how it works" />
 
 ## How It Works
 When you press the Windows key, a pixelated/blurred screenshot is taken and set as your lock screen background.

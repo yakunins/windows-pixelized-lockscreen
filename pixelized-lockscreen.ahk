@@ -1,4 +1,7 @@
-; generates pixelized screenshot on Win keypress, and set it as lockscreen background (temporarily, until reset or logoff)
+; generates pixelized screenshot on Win keypress
+; set it as lockscreen background (temporarily, until reset or logoff)
+; (c) Sergey Yakunin and others, see files in lib folder
+
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 
@@ -14,7 +17,7 @@
 config := {
     fileConfig: "config.json",
     pixelateSize: 10,
-    blurSize: 2, ; effectively screenshot scale, e.g. 1920×1080 to produce 960×540 screenshot
+    blurSize: 2, ; effectively screenshot scale, e.g. 1920*1080 to produce 960*540 screenshot
     idlePeriod: 1000 * 60, ; period of inactivity, after which screenshot to be set as lockscreen image, 0 to disable
     screenshotFilename: "screenshot.png",
     removeScreenshot: {
@@ -38,7 +41,7 @@ config := MergeFileConfig(config, config.debug) ; read local config, so it take 
 config.screenshotPath := A_ScriptDir . "\" . config.screenshotFilename
 
 state := {
-    isLockImageSet: 0,
+    isLockScreenSet: 0,
     isUnlocked: 1,
     isIdle: 0,
     win: 0, ; state of win key (#)
@@ -50,13 +53,12 @@ Init() {
     Screenshot()
     SetLockScreen()
     UnsetLockScreen()
+    RemoveScreenshot()
     ; test run end
 
-    if (config.idlePeriod > 0)
-        IdleCheck()
-
-    OnExit(ExitFn)
     RegisterSessionMonitor()
+    OnExit(ExitFn)
+    IdleCheck()
 
     ; key bindings
     Hotkey "~LWin", OnWinDown, "On"
@@ -91,18 +93,18 @@ Screenshot() {
     LogToFile("Screenshot()")
     ScreenshotToFile(config.screenshotPath, config.pixelateSize, config.blurSize, config.debug) ; ~33ms
 }
-SetLockScreen() {
+SetLockScreen(force := false) {
     LogToFile("SetLockScreen()")
-    if !state.isLockImageSet {
+    if !state.isLockScreenSet or force {
         SetLockScreenImage(config.screenshotPath, config.registry.path, config.registry.item, config.debug) ; ~3ms
-        state.isLockImageSet := 1
+        state.isLockScreenSet := 1
     }
 }
-UnsetLockScreen() {
+UnsetLockScreen(force := false) {
     LogToFile("UnsetLockScreen()")
-    if state.isLockImageSet {
+    if state.isLockScreenSet or force {
         UnsetLockScreenImage(config.registry.path, config.registry.item, config.debug) ; ~2ms
-        state.isLockImageSet := 0
+        state.isLockScreenSet := 0
     }
 }
 RemoveScreenshot() {
@@ -123,18 +125,24 @@ OnSessionUnlock() {
         UnsetLockScreen()
     if config.removeScreenshot.onUnlock
         RemoveScreenshot()
+    if (!config.unsetLockImage.onUnlock and !config.removeScreenshot.onUnlock)
+        SetLockScreen(true)
 }
 IdleCheck() {
-    if A_TimeIdle > config.idlePeriod {
-        SetTimer IdleCheck, config.idlePeriod * -1 ; if idle, schedule next check for (not) idle after minute
+    if (config.idlePeriod < 100) ; less than 100 ms
+        return
+    if A_TimeIdle < config.idlePeriod {
+        ; not idle yet
+        state.isIdle := 0
+        SetTimer IdleCheck, config.idlePeriod * -0.2 ; schedule next check after 12 seconds (default)
+    } else {
+        ; already idle
+        SetTimer IdleCheck, config.idlePeriod * -1  ; schedule next check after 60 seconds (default)
         if !state.isIdle {
             state.isIdle := 1
-            Screenshot() ; this may abort sleep timer as of Screenshot() uses disk access inside
+            Screenshot() ; this may abort sleep timer as of Screenshot() internally writes on disk
             SetLockScreen()
         }
-    } else {
-        SetTimer IdleCheck, 10 * 1000 * -1 ; if schedule check for idle after 10 seconds
-        state.isIdle := 0
     }
 }
 ExitFn(ExitReason, ExitCode) {

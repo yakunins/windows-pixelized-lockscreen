@@ -1,4 +1,4 @@
-# Pixelized Lockscreen Background Image
+# Lockscreen with Pixelized Screenshot
 
 <img src="images/pixelized-lockscreen-how-it-works.gif" width="768" alt="pixelized lockscreen background: how it works" />
 

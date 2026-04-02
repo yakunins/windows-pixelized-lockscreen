@@ -106,6 +106,8 @@ Init() {
     SetTrayIcon(config.trayIcon)
     if (config.trayTooltip == false)
         RemoveTrayTooltip()
+    else
+        A_IconTip := "Pixelized Lockscreen v" . config.version
 }
 
 Screenshot() {

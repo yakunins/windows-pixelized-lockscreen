@@ -23,7 +23,7 @@
 #include lib/UseBase64TrayIcon.ahk
 
 config := {
-    version: "2.0",
+    version: "2.1",
     fileConfig: "config.json",
     handleKeypressLocking: {
         enabled: true,
@@ -32,8 +32,8 @@ config := {
     },
     handleIdleLocking: {
         enabled: true,
-        idleTimeScreenshot: 30,
-        idleCheck: 10,
+        screenshotAfter: "30s",
+        idleCheckInterval: "10s",
     },
     handleStartMenuLocking: {
         enabled: false,

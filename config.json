@@ -7,8 +7,8 @@
     },
     "handleIdleLocking": {
         "enabled": true,
-        "idleTimeScreenshot": 30,
-        "idleCheck": 10
+        "screenshotAfter": "40s",
+        "idleCheckInterval": "20s"
     },
     "handleStartMenuLocking": {
         "enabled": true

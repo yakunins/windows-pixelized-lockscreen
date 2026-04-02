@@ -1,19 +1,30 @@
 HandleIdleLocking(cfg) {
     if !cfg.enabled
         return
-    if (cfg.idleTimeScreenshot < 1)
+    screenshotAfter := _ParseDuration(cfg.screenshotAfter)
+    if (screenshotAfter < 1000)
         return
-    checkInterval := cfg.HasProp("idleCheck") ? cfg.idleCheck : 10
-    _HandleIdleLocking_Start(cfg.idleTimeScreenshot, checkInterval)
+    checkInterval := cfg.HasProp("idleCheckInterval") ? _ParseDuration(cfg.idleCheckInterval) : 10000
+    _HandleIdleLocking_Start(screenshotAfter, checkInterval)
 }
 
-_HandleIdleLocking_Start(idleTimeScreenshot, idleCheck) {
-    threshold := (idleTimeScreenshot - idleCheck / 2) * 1000
-    interval := idleCheck * 1000
+; Parses duration value: "20s" → 20000ms, "500ms" → 500ms, 20 → 20 (ms)
+_ParseDuration(val) {
+    if IsNumber(val)
+        return val
+    val := Trim(val)
+    if (SubStr(val, -1) == "ms")
+        return Number(SubStr(val, 1, -2))
+    if (SubStr(val, -1) == "s")
+        return Number(SubStr(val, 1, -1)) * 1000
+    return Number(val)
+}
+
+_HandleIdleLocking_Start(screenshotAfterMs, checkIntervalMs) {
+    threshold := screenshotAfterMs - checkIntervalMs / 2
     _HandleIdleLocking_Tick.idleTriggered := false
     _HandleIdleLocking_Tick.threshold := threshold
-    _HandleIdleLocking_Tick.interval := interval
-    SetTimer _HandleIdleLocking_Tick, interval
+    SetTimer _HandleIdleLocking_Tick, checkIntervalMs
 }
 
 _HandleIdleLocking_Tick() {

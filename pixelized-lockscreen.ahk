@@ -13,6 +13,9 @@
 #include lib/HandleIdleLocking.ahk ; HandleIdleLocking()
 #include lib/DetectPowerClicked.ahk ; OnPowerClicked()
 #include lib/HandleStartMenuLocking.ahk ; HandleStartMenuLocking()
+#include lib/HandleLidCloseLocking.ahk ; HandleLidCloseLocking()
+#include lib/HandleBluetoothDynamicLocking.ahk ; HandleBluetoothDynamicLocking()
+#include lib/HandleCtrlAltDelLocking.ahk ; HandleCtrlAltDelLocking() — no-op, see comment
 #include lib/HandleSessionEvents.ahk ; HandleSessionEvents()
 #include lib/SessionMonitor.ahk ; RegisterSessionMonitor(), UnregisterSessionMonitor()
 #include lib/ClickLogger.ahk ; StartClickLogger()
@@ -20,6 +23,7 @@
 #include lib/UseBase64TrayIcon.ahk
 
 config := {
+    version: "2.0",
     fileConfig: "config.json",
     handleKeypressLocking: {
         enabled: true,
@@ -32,6 +36,16 @@ config := {
         idleCheck: 10,
     },
     handleStartMenuLocking: {
+        enabled: false,
+    },
+    handleLidCloseLocking: {
+        enabled: false,
+    },
+    handleBluetoothDynamicLocking: {
+        enabled: false,
+        checkInterval: 5, ; seconds between Bluetooth device polls
+    },
+    handleCtrlAltDelLocking: {
         enabled: false,
     },
     handleSessionEvents: {
@@ -83,6 +97,9 @@ Init() {
     HandleKeypressLocking(config.handleKeypressLocking)
     HandleIdleLocking(config.handleIdleLocking)
     HandleStartMenuLocking(config.handleStartMenuLocking)
+    HandleLidCloseLocking(config.handleLidCloseLocking)
+    HandleBluetoothDynamicLocking(config.handleBluetoothDynamicLocking)
+    HandleCtrlAltDelLocking(config.handleCtrlAltDelLocking)
     HandleSessionEvents(config.handleSessionEvents)
 
     ; tray

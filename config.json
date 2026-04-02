@@ -7,16 +7,20 @@
     },
     "handleIdleLocking": {
         "enabled": true,
-        "idlePeriod": 60000
+        "idleTimeScreenshot": 30,
+        "idleCheck": 10
     },
     "handleStartMenuLocking": {
         "enabled": false
+    },
+    "handleSessionEvents": {
+        "unsetLockScreenOnUnlock": false,
+        "removeScreenshotOnUnlock": false
     },
     "screenshot": {
         "pixelateSize": 10,
         "blurSize": 2,
         "filename": "screenshot.png",
-        "removeOnUnlock": false,
         "removeOnExitApp": true
     },
     "lockScreen": {
@@ -24,7 +28,6 @@
         "registryItem": "LockScreenImagePath",
         "defaultImagePath": false,
         "defaultImagePath_example": ".\\images\\pixelation-icon.png",
-        "unsetOnUnlock": false,
         "unsetOnExitApp": true
     },
     "trayIcon": "screenshotlock",

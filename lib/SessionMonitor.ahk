@@ -28,11 +28,9 @@ WM_WTSSESSION_CHANGE(wParam, lParam, msg, hwnd) {
 
     switch wParam {
         case WTS_SESSION_LOCK:
-            state.isUnlocked := false
             OnSessionLock()
             OutputDebug("WTS_SESSION_LOCK")
         case WTS_SESSION_UNLOCK:
-            state.isUnlocked := true
             OnSessionUnlock()
             OutputDebug("WTS_SESSION_UNLOCK")
         default:

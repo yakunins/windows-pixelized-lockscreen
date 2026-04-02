@@ -10,11 +10,11 @@
 #include lib/SetLockScreenImage.ahk ; SetLockScreenImage(), UnsetLockScreenImage()
 #include lib/LockWorkstation.ahk ; LockWorkstation()
 #include lib/HandleKeypressLocking.ahk ; HandleKeypressLocking()
-#include lib/LockSessionMonitor.ahk ; RegisterSessionMonitor(), UnregisterSessionMonitor()
+#include lib/HandleIdleLocking.ahk ; HandleIdleLocking()
+#include lib/HandleSessionEvents.ahk ; HandleSessionEvents()
+#include lib/SessionMonitor.ahk ; RegisterSessionMonitor(), UnregisterSessionMonitor()
 #include lib/RemoveTrayTooltip.ahk
 #include lib/UseBase64TrayIcon.ahk
-#include lib/Log.ahk
-#include lib/Ticks.ahk
 
 config := {
     fileConfig: "config.json",
@@ -25,23 +25,26 @@ config := {
     },
     handleIdleLocking: {
         enabled: true,
-        idlePeriod: 1000 * 60,
+        idleTimeScreenshot: 30,
+        idleCheck: 10,
     },
     handleStartMenuLocking: {
         enabled: false,
+    },
+    handleSessionEvents: {
+        unsetLockScreenOnUnlock: false,
+        removeScreenshotOnUnlock: false,
     },
     screenshot: {
         pixelateSize: 10,
         blurSize: 2,
         filename: "screenshot.png",
-        removeOnUnlock: false,
         removeOnExitApp: true,
     },
     lockScreen: {
         registryPath: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP',
         registryItem: 'LockScreenImagePath',
         defaultImagePath: false,
-        unsetOnUnlock: false,
         unsetOnExitApp: true,
     },
     trayIcon: "screenshotlock",
@@ -55,7 +58,6 @@ config.resolvedDefaultImagePath := config.lockScreen.defaultImagePath != 0
 
 state := {
     isLockScreenSet: 0,
-    isIdle: 0,
 }
 
 Init()
@@ -71,9 +73,8 @@ Init() {
 
     ; locking handlers
     HandleKeypressLocking(config.handleKeypressLocking)
-
-    if config.handleIdleLocking.enabled
-        IdleCheck()
+    HandleIdleLocking(config.handleIdleLocking)
+    HandleSessionEvents(config.handleSessionEvents)
 
     ; tray
     SetTrayIcon(config.trayIcon)
@@ -106,34 +107,6 @@ UnsetLockScreen(force := false) {
 RemoveScreenshot() {
     LogToFile("RemoveScreenshot()")
     DeleteFile(config.screenshotPath)
-}
-OnSessionLock() {
-    LogToFile("OnSessionLock()")
-}
-OnSessionUnlock() {
-    LogToFile("OnSessionUnlock()")
-    if config.lockScreen.unsetOnUnlock
-        UnsetLockScreen()
-    if config.screenshot.removeOnUnlock
-        RemoveScreenshot()
-    if (!config.lockScreen.unsetOnUnlock and !config.screenshot.removeOnUnlock)
-        SetLockScreen(true)
-}
-IdleCheck() {
-    period := config.handleIdleLocking.idlePeriod
-    if (period < 100)
-        return
-    if A_TimeIdle < period {
-        state.isIdle := 0
-        SetTimer IdleCheck, period * -0.2
-    } else {
-        SetTimer IdleCheck, period * -1
-        if !state.isIdle {
-            state.isIdle := 1
-            Screenshot()
-            SetLockScreen()
-        }
-    }
 }
 ExitFn(ExitReason, ExitCode) {
     LogToFile("ExitFn()")

@@ -1,6 +1,10 @@
-:: creates at-startup Scheduled Task 
+:: creates at-startup Scheduled Task and disables native Win+L
 @echo off
 setlocal EnableExtensions DisableDelayedExpansion
+
+:: Disable native Win+L (app handles it programmatically)
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v DisableLockWorkstation /t REG_DWORD /d 1 /f
+echo Win+L disabled (handled by app).
 
 set PS=powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile
 set TaskName='PixelizedLockscreen'

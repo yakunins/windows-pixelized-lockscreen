@@ -1,21 +1,31 @@
 {
     "meta": "config file for pixelized-lockscreen.ahk",
-    "pixelateSize": 10,
-    "blurSize": 2,
-    "idlePeriod": 60000,
-    "screenshotFilename": "screenshot.png",
-    "removeScreenshot": {
-        "onWinKeyup": false,
-        "onUnlock": false,
-        "onExitApp": true
+    "handleKeypressLocking": {
+        "enabled": true,
+        "hotkey": "Win+L",
+        "lockDelay": 150
     },
-    "registry": {
-        "path": "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PersonalizationCSP",
-        "item": "LockScreenImagePath"
+    "handleIdleLocking": {
+        "enabled": true,
+        "idlePeriod": 60000
     },
-    "unsetLockImage": {
-        "imagePath": false,
-        "imagePath_example": ".\\images\\pixelation-icon.png"
+    "handleStartMenuLocking": {
+        "enabled": false
+    },
+    "screenshot": {
+        "pixelateSize": 10,
+        "blurSize": 2,
+        "filename": "screenshot.png",
+        "removeOnUnlock": false,
+        "removeOnExitApp": true
+    },
+    "lockScreen": {
+        "registryPath": "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PersonalizationCSP",
+        "registryItem": "LockScreenImagePath",
+        "defaultImagePath": false,
+        "defaultImagePath_example": ".\\images\\pixelation-icon.png",
+        "unsetOnUnlock": false,
+        "unsetOnExitApp": true
     },
     "trayIcon": "screenshotlock",
     "trayTooltip": true,

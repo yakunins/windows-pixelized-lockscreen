@@ -1,0 +1,4 @@
+pixelized-lockscreen.exe
+config.json
+install.cmd
+uninstall.cmd

@@ -23,13 +23,15 @@ if errorlevel 1 (
     exit /b 1
 )
 
-:: Read version from pixelized-lockscreen.ahk
+:: Read version from pixelized-lockscreen.ahk (matches: version: "2.0",)
 set "VERSION="
-for /f "tokens=4 delims= " %%a in ('findstr /c:"static Version" pixelized-lockscreen.ahk') do (
+for /f "tokens=2 delims=:" %%a in ('findstr /c:"version:" pixelized-lockscreen.ahk') do (
     set "VERSION=%%~a"
 )
-:: Remove trailing quote if present
+:: Clean up: remove quotes, commas, spaces
+set "VERSION=%VERSION: =%"
 set "VERSION=%VERSION:"=%"
+set "VERSION=%VERSION:,=%"
 
 if "%VERSION%"=="" (
     echo ERROR: Could not read version from pixelized-lockscreen.ahk

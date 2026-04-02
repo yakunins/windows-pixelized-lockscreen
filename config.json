@@ -11,7 +11,7 @@
         "idleCheck": 10
     },
     "handleStartMenuLocking": {
-        "enabled": false
+        "enabled": true
     },
     "handleSessionEvents": {
         "unsetLockScreenOnUnlock": false,
@@ -32,5 +32,6 @@
     },
     "trayIcon": "screenshotlock",
     "trayTooltip": true,
-    "debug": false
+    "debug": false,
+    "debugClicks": false
 }

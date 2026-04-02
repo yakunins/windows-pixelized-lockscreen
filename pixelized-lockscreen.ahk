@@ -11,8 +11,11 @@
 #include lib/LockWorkstation.ahk ; LockWorkstation()
 #include lib/HandleKeypressLocking.ahk ; HandleKeypressLocking()
 #include lib/HandleIdleLocking.ahk ; HandleIdleLocking()
+#include lib/DetectPowerClicked.ahk ; OnPowerClicked()
+#include lib/HandleStartMenuLocking.ahk ; HandleStartMenuLocking()
 #include lib/HandleSessionEvents.ahk ; HandleSessionEvents()
 #include lib/SessionMonitor.ahk ; RegisterSessionMonitor(), UnregisterSessionMonitor()
+#include lib/ClickLogger.ahk ; StartClickLogger()
 #include lib/RemoveTrayTooltip.ahk
 #include lib/UseBase64TrayIcon.ahk
 
@@ -50,6 +53,7 @@ config := {
     trayIcon: "screenshotlock",
     trayTooltip: true,
     debug: false,
+    debugClicks: false,
 }
 config := MergeFileConfig(config, config.debug)
 config.screenshotPath := A_ScriptDir . "\" . config.screenshot.filename
@@ -71,9 +75,14 @@ Init() {
     RegisterSessionMonitor()
     OnExit(ExitFn)
 
+    ; click logger (must start before handlers that use it)
+    if (config.debugClicks or config.handleStartMenuLocking.enabled)
+        StartClickLogger()
+
     ; locking handlers
     HandleKeypressLocking(config.handleKeypressLocking)
     HandleIdleLocking(config.handleIdleLocking)
+    HandleStartMenuLocking(config.handleStartMenuLocking)
     HandleSessionEvents(config.handleSessionEvents)
 
     ; tray

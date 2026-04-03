@@ -27,5 +27,5 @@ To reduce screenshot size, provide `blurSize` with a greater value. Effectively,
 ———  
 Special thanks to [mikeyww from AHK forum](https://www.autohotkey.com/boards/memberlist.php?style=23&mode=viewprofile&u=59977) for help.  
 ———  
-Enjoy!
+Enjoy!  
 A donut, [maybe](https://www.paypal.com/donate/?business=KXM47EKBXFV4S&no_recurring=0&item_name=funding+of+github.com%2Fyakunins&currency_code=USD)? 🍩

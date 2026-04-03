@@ -1,3 +1,9 @@
+#Requires AutoHotkey v2.0
+
+#include DisableLockWorkstation.ahk
+#include EnableLockWorkstation.ahk
+
+
 HandleKeypressLocking(cfg) {
     if !cfg.enabled
         return
@@ -8,7 +14,9 @@ HandleKeypressLocking(cfg) {
 }
 
 _HandleKeypressLocking_Handler(delay, *) {
+    DisableLockWorkstation()
     Screenshot()
     SetLockScreen()
+    EnableLockWorkstation()
     LockWorkstation(delay)
 }

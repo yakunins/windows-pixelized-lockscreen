@@ -23,7 +23,7 @@
 #include lib/UseBase64TrayIcon.ahk
 
 config := {
-    version: "2.1",
+    version: "2.2",
     fileConfig: "config.json",
     handleKeypressLocking: {
         enabled: true,

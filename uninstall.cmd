@@ -2,10 +2,6 @@
 @echo off
 setlocal EnableExtensions DisableDelayedExpansion
 
-:: Re-enable native Win+L
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v DisableLockWorkstation /t REG_DWORD /d 0 /f
-echo Win+L re-enabled.
-
 set PS=powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile
 set TaskName='PixelizedLockscreen'
 

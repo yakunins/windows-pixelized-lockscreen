@@ -5,7 +5,7 @@
 ## How It Works
 When you press Win+L, a pixelated/blurred screenshot is taken and set as your lock screen background, then the workstation is locked.
 The same screenshot capture happens after a period of inactivity, when clicking the Power button in Start Menu, on laptop lid close, or when a paired Bluetooth device goes out of range (Dynamic Lock).
-This helps you stay focused and maintain an unobtrusive work environment, see [Hund's recommendations](https://web.archive.org/web/20231004142509/https://hund.tty1.se/2018/09/04/use-a-pixelated-version-of-your-desktop-as-your-lockscreen-with-i3lock.html).  
+This helps you stay focused and maintain an unobtrusive work environment, see [Hund's recommendations](https://hunden.linuxkompis.se/2018/09/04/use-a-pixelated-version-of-your-desktop-as-your-lockscreen-with-i3lock.html).  
 
 ## Installation
 1. Download the [latest release](https://github.com/yakunins/windows-pixelized-lockscreen/releases/latest) and extract the zip

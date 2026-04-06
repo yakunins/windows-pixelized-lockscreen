@@ -23,7 +23,7 @@
 #include lib/UseBase64TrayIcon.ahk
 
 config := {
-    version: "2.2",
+    version: "2.3",
     fileConfig: "config.json",
     handleKeypressLocking: {
         enabled: true,
@@ -174,7 +174,10 @@ GetFullPath(path) {
 LogToFile(str1, str2 := "") {
     if config.debug == 0
         return
-    logFilePath := A_LineFile . "\..\log.txt"
+    logDir := A_ScriptDir . "\logs"
+    if !DirExist(logDir)
+        DirCreate(logDir)
+    logFilePath := logDir . "\log.txt"
     timestamp := " (" . FormatTime(, "hh:mm:ss") . "." A_MSec . ") "
     FileAppend str1 . timestamp . str2 . "`n", logFilePath
 }

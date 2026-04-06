@@ -57,13 +57,19 @@ _OnClickLog(key) {
         . " win:`"" . winTitle . "`" class:" . winClass . " exe:" . winExe
         . " el:`"" . elName . "`" autoId:" . elAutoId . " type:" . elType
         . (control ? " ctrl:" . control : "")
-    logFilePath := A_LineFile . "\..\..\" . "log.txt"
-    timestamp := " (" . FormatTime(, "hh:mm:ss") . "." A_MSec . ") "
-    FileAppend "Click" . timestamp . line . "`n", logFilePath
-
-    ; Notify listeners
+    ; Notify listeners (always, regardless of logging setting)
     for listener in _ClickLog.listeners
         listener(elAutoId, elName, winClass, winExe)
+
+    ; Log to file only when debugClicks is enabled
+    if !config.debugClicks
+        return
+    logDir := A_ScriptDir . "\logs"
+    if !DirExist(logDir)
+        DirCreate(logDir)
+    logFilePath := logDir . "\log.txt"
+    timestamp := " (" . FormatTime(, "hh:mm:ss") . "." A_MSec . ") "
+    FileAppend "Click" . timestamp . line . "`n", logFilePath
 }
 
 ; Get string property from UIA element
